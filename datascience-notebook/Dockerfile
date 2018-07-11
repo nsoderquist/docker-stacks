@@ -1,6 +1,6 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
-FROM jupyter/scipy-notebook
+FROM willthelaw/scipy-notebook
 
 LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
 
@@ -8,11 +8,16 @@ LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
 # be skipped to shorten build time.
 ARG TEST_ONLY_BUILD
 
+ENV DEBIAN_FRONTEND noninteractive
+
 USER root
 
+#SRCC add ons
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libnss-extrausers 
+
 # R pre-requisites
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+RUN apt-get install -y --no-install-recommends \
     fonts-dejavu \
     tzdata \
     gfortran \
