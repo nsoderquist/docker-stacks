@@ -1,0 +1,25 @@
+FROM willthelaw/datascience-notebook
+
+USER root
+
+RUN apt-get update -y \
+
+#Stata installation into typical directory
+ENV STATA_PKG=fqrnkxys6ro8ndo1nsl4hokiyk0pr6oc.gz
+
+mkdir ~/statainstall/
+run wget -q https://stanford.box.com/shared/static/${STATA_PKG} -O ~/statainstall/${STATA_PKG}
+tar -xzf ~/statainstall/{STATA_PKG} -C ~/statainstall/
+
+mkdir /usr/local/stata15
+cd /usr/local/stata15
+~/statainstall/install -q
+
+
+
+ENV STATA_PKG=fqrnkxys6ro8ndo1nsl4hokiyk0pr6oc.gz
+
+mkdir ~/statainstall/
+run wget -q https://stanford.box.com/shared/static/fqrnkxys6ro8ndo1nsl4hokiyk0pr6oc.gz
+
+
