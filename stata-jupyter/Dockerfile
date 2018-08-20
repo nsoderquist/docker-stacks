@@ -14,7 +14,7 @@ USER root
 
 #SRCC add ons
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libnss-extrausers 
+    libnss-extrausers
 
 # R pre-requisites
 RUN apt-get install -y --no-install-recommends \
@@ -25,12 +25,24 @@ RUN apt-get install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/*
 
 # Stata pre-requisites
-# get libpng12 directly
+# get libpng12
 RUN cd /tmp && \
     wget -q http://security.ubuntu.com/ubuntu/pool/main/libp/libpng/libpng12-0_1.2.54-1ubuntu1.1_amd64.deb && \
     dpkg -i libpng12-0_1.2.54-1ubuntu1.1_amd64.deb && \
     rm /tmp/libpng12-0_1.2.54-1ubuntu1.1_amd64.deb && \
     apt-get install -f
+
+# Install saspy for SAS
+RUN pip install sas_kernel -q
+
+# Install IPYstata
+RUN pip install ipystata -q
+
+# configure Stata program path
+#RUN python import pandas as pd && \
+ #   import ipystata && \
+  #  from ipystata.config import config_stata && \
+   # config_stata('~/stata/stata-se')
 
 # Julia dependencies
 # install Julia packages in /opt/julia instead of $HOME
@@ -54,14 +66,6 @@ RUN mkdir /etc/julia && \
     fix-permissions $JULIA_PKGDIR
 
 USER $NB_UID
-
-# Install IPYstata
-RUN pip install ipystata -q
-    #configure Stata program path
-#RUN python import pandas as pd && \
- #   import ipystata && \
-  #  from ipystata.config import config_stata && \
-   # config_stata('/Applications/Stata/StataSE.app/Contents/MacOS/StataSE')
 
 # R packages including IRKernel which gets installed globally.
 RUN conda install --quiet --yes \
