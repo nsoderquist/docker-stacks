@@ -12,7 +12,9 @@ ENV DEBIAN_FRONTEND noninteractive
 
 USER root
 
-#SRCC add ons
+# SRCC add ons
+# The following adds ipystata and saspy kernels (and pre-requisites) for use of Stata and SAS within a Jupyter Notebook.
+# Stata and SAS must be installed on the system seperately in their default install locations, then mounted to docker.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libnss-extrausers
 
@@ -24,7 +26,7 @@ RUN apt-get install -y --no-install-recommends \
     gcc && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Stata pre-requisites
+# Stata and SAS pre-requisites
 # get libpng12-0, libxp6, libjpeg62
 RUN cd /tmp && \
     wget -q http://security.ubuntu.com/ubuntu/pool/main/libp/libpng/libpng12-0_1.2.54-1ubuntu1.1_amd64.deb && \
@@ -42,19 +44,13 @@ RUN cd /tmp && \
 RUN pip install sas_kernel -q
 COPY sascfg_personal.py /opt/conda/lib/python3.6/site-packages/saspy/
 
-# SAS pre-requisites
-# RUN echo deb http://us.archive.ubuntu.com/ubuntu trusty main universe > /etc/apt/sources.list.d/saslib-source.list
-# RUN apt-get update
-# RUN apt-get install -y --no-install-recommends libxp6 libjpeg62 libpng12-0
-
 # Install IPYstata
 RUN pip install ipystata -q
 
-# configure Stata program path
-#RUN python import pandas as pd && \
- #   import ipystata && \
-  #  from ipystata.config import config_stata && \
-   # config_stata('~/stata/stata-se')
+# SAS pre-requisites (old method)
+# RUN echo deb http://us.archive.ubuntu.com/ubuntu trusty main universe > /etc/apt/sources.list.d/saslib-source.list
+# RUN apt-get update
+# RUN apt-get install -y --no-install-recommends libxp6 libjpeg62 libpng12-0
 
 # Julia dependencies
 # install Julia packages in /opt/julia instead of $HOME
